@@ -16,8 +16,8 @@ resource "azurerm_ip_group" "this" {
 
   lifecycle {
     ignore_changes = [
-      # Ignore changes to the tags attribute
-      cidrs,
+      # Ignore changes to the cidrs attribute as it is managed by the azurerm_ip_group_cidr resource
+      cidrs
     ]
   }
 }
