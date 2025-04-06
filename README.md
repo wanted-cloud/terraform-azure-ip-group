@@ -95,7 +95,11 @@ Default: `{}`
 
 ## Outputs
 
-No outputs.
+The following outputs are exported:
+
+### <a name="output_ip_group"></a> [ip\_group](#output\_ip\_group)
+
+Description: The IP group resource.
 
 ## Resources
 
@@ -126,7 +130,7 @@ The minimal usage for the module is as follows:
 module "template" {
     source = "../.."
     
-    name = "example1-ipgroup"
+    name = "example-ipgroup"
     resource_group_name = "example-rg"
     address_spaces = [ "10.0.0.0/24" ]
 }
