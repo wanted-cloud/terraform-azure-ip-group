@@ -1,7 +1,7 @@
 <!-- BEGIN_TF_DOCS -->
-# wanted-cloud/terraform-module-template
+# wanted-cloud/terraform-azure-ip-group
 
-This repository represents a template for a Terraform building block module as we think it should be done, so it's for sure opinionated but in our eyes simple and powerful. Feel free to use or contribute.
+Terraform module building block managing Azure IP group resource.
 
 ## Table of contents
 
@@ -19,15 +19,45 @@ No requirements.
 
 ## Providers
 
-No providers.
+The following providers are used by this module:
+
+- <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm)
 
 ## Required Inputs
 
-No required inputs.
+The following input variables are required:
+
+### <a name="input_name"></a> [name](#input\_name)
+
+Description: Name of the IP group.
+
+Type: `string`
+
+### <a name="input_resource_group_name"></a> [resource\_group\_name](#input\_resource\_group\_name)
+
+Description: Name of the resource group in which the IP group will be created.
+
+Type: `string`
 
 ## Optional Inputs
 
 The following input variables are optional (have default values):
+
+### <a name="input_address_spaces"></a> [address\_spaces](#input\_address\_spaces)
+
+Description: List of address spaces for the IP group.
+
+Type: `list(string)`
+
+Default: `[]`
+
+### <a name="input_location"></a> [location](#input\_location)
+
+Description: Location of the resource group in which the IP group will be created, if not set it will be the same as the resource group.
+
+Type: `string`
+
+Default: `""`
 
 ### <a name="input_metadata"></a> [metadata](#input\_metadata)
 
@@ -37,17 +67,29 @@ Type:
 
 ```hcl
 object({
-    resource_timeouts = optional(object({
-      create = optional(string, "30m")
-      read   = optional(string, "5m")
-      update = optional(string, "30m")
-      delete = optional(string, "30m")
-    }), {})
+    resource_timeouts = optional(
+      map(
+        object({
+          create = optional(string, "30m")
+          read   = optional(string, "5m")
+          update = optional(string, "30m")
+          delete = optional(string, "30m")
+        })
+      ), {}
+    )
     tags                     = optional(map(string), {})
     validator_error_messages = optional(map(string), {})
     validator_expressions    = optional(map(string), {})
   })
 ```
+
+Default: `{}`
+
+### <a name="input_tags"></a> [tags](#input\_tags)
+
+Description: Tags to be applied to the IP group.
+
+Type: `map(string)`
 
 Default: `{}`
 
@@ -57,7 +99,11 @@ No outputs.
 
 ## Resources
 
-No resources.
+The following resources are used by this module:
+
+- [azurerm_ip_group.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/ip_group) (resource)
+- [azurerm_ip_group_cidr.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/ip_group_cidr) (resource)
+- [azurerm_resource_group.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/resource_group) (data source)
 
 ## Usage
 
@@ -67,7 +113,7 @@ Module was also published via Terraform Registry and can be used as a module fro
 
 ```hcl
 module "example" {
-  source  = "wanted-cloud/..."
+  source  = "wanted-cloud/ip-group/azure"
   version = "x.y.z"
 }
 ```
@@ -79,6 +125,10 @@ The minimal usage for the module is as follows:
 ```hcl
 module "template" {
     source = "../.."
+    
+    name = "example1-ipgroup"
+    resource_group_name = "example-rg"
+    address_spaces = [ "10.0.0.0/24" ]
 }
 ```
 ## Contributing
