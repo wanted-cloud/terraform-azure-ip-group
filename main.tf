@@ -5,14 +5,14 @@
  */
 
 resource "azurerm_ip_group" "this" {
-  name                = "example1-ipgroup"
+  name                = var.name
   location            = var.location != "" ? var.location : data.azurerm_resource_group.this.location
   resource_group_name = data.azurerm_resource_group.this.name
 
   # CIDRs are defined by its own resource therefore this is empty
   cidrs = []
 
-  tags = merge(var.tags, local.metadata.tags)
+  tags = merge(local.metadata.tags, var.tags)
 
   lifecycle {
     ignore_changes = [
