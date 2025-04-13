@@ -20,4 +20,23 @@ resource "azurerm_ip_group" "this" {
       cidrs
     ]
   }
+
+  timeouts {
+    create = try(
+      local.metadata.resource_timeouts["azurerm_ip_group"]["create"],
+      local.metadata.resource_timeouts["default"]["create"]
+    )
+    read = try(
+      local.metadata.resource_timeouts["azurerm_ip_group"]["read"],
+      local.metadata.resource_timeouts["default"]["read"]
+    )
+    update = try(
+      local.metadata.resource_timeouts["azurerm_ip_group"]["update"],
+      local.metadata.resource_timeouts["default"]["update"]
+    )
+    delete = try(
+      local.metadata.resource_timeouts["azurerm_ip_group"]["delete"],
+      local.metadata.resource_timeouts["default"]["delete"]
+    )
+  }
 }
